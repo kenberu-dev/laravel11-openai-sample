@@ -9,16 +9,20 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        return inertia('Dashboard');
+        return inertia('Dashboard', ['message' => '']);
     }
 
     public function send()
     {
+        $prompt = "利用者の情報\n"
+                . "希望職種: 事務\n"
+                . "障害・特性: ADHD\n"
+                . "質問: ". request('prompt');
         $result = OpenAI::chat()->create([
-            'model' => 'gpt-4o',
+            'model' => 'gpt-4o-mini',
             'messages' => [
-                ['role' => 'system', 'content' => 'あなたは就労移行支援の専門家です。利用者の状況に合わせた具体的で簡潔なアドバイスを提供してください。'],
-                ['role' => 'user', 'content' => request('prompt')],
+                ['role' => 'developer', 'content' => 'あなたは障害福祉の専門家です。利用者の状況に合わせた具体的なアドバイスを提供してください。その際、支援員の支援可能内容に限定して回答してください。'],
+                ['role' => 'user', 'content' => $prompt],
             ]
         ]);
 
